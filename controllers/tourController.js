@@ -1,24 +1,27 @@
-const Tour = require('../models/tourModel')
+const Tour = require('../models/tourModel');
 
-const checkBody = (req, res, next)=>{
-  console.log("checkbody",req.body)
-  if(!req.body.name || !req.body.price)
-  {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Name or Price is required'
-    });
-  }
-  next();
-}
 const getAllTours = (req, res) => {
   // res.status(200).json({ status: 'success', results: tours?.length, tours });
 };
 const getToursById = (req, res) => {
   // res.status(200).json({ status: 'success', tour: tour ? tour : 'Invalid Id' });
 };
-const createTour = (req, res) => {
- 
+const createTour = async (req, res) => {
+  try {
+    const newTour = await Tour.create(req.body);
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour: newTour,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      status: 'fail',
+      message: err,
+    });
+  }
 };
 const updateTour = (req, res) => {
   res.status(200).json({
@@ -46,5 +49,4 @@ module.exports = {
   createTour,
   deleteTour,
   updateTour,
-  checkBody
 };
